@@ -84,9 +84,132 @@ const App = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
+  // Lightning particle effect
+  useEffect(() => {
+    const canvas = document.getElementById('lightningCanvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    interface Lightning {
+      x: number;
+      y: number;
+      endX: number;
+      endY: number;
+      segments: { x: number; y: number }[];
+      life: number;
+      maxLife: number;
+      opacity: number;
+    }
+
+    const lightnings: Lightning[] = [];
+
+    const createLightning = () => {
+      const startX = Math.random() * canvas.width;
+      const startY = 0;
+      const endX = startX + (Math.random() - 0.5) * 200;
+      const endY = canvas.height * 0.8;
+
+      const segments: { x: number; y: number }[] = [];
+      const segmentCount = 8 + Math.floor(Math.random() * 8);
+      
+      for (let i = 0; i <= segmentCount; i++) {
+        const progress = i / segmentCount;
+        const x = startX + (endX - startX) * progress + (Math.random() - 0.5) * 50;
+        const y = startY + (endY - startY) * progress;
+        segments.push({ x, y });
+      }
+
+      return {
+        x: startX,
+        y: startY,
+        endX,
+        endY,
+        segments,
+        life: 0,
+        maxLife: 10 + Math.random() * 20,
+        opacity: 1
+      };
+    };
+
+    const drawLightning = (lightning: Lightning) => {
+      ctx.strokeStyle = `rgba(147, 197, 253, ${lightning.opacity})`;
+      ctx.lineWidth = 2 + Math.random() * 2;
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = 'rgba(147, 197, 253, 0.8)';
+
+      ctx.beginPath();
+      ctx.moveTo(lightning.segments[0].x, lightning.segments[0].y);
+      
+      for (let i = 1; i < lightning.segments.length; i++) {
+        ctx.lineTo(lightning.segments[i].x, lightning.segments[i].y);
+      }
+      
+      ctx.stroke();
+
+      // Draw glow
+      ctx.strokeStyle = `rgba(255, 255, 255, ${lightning.opacity * 0.5})`;
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 30;
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+      
+      ctx.beginPath();
+      ctx.moveTo(lightning.segments[0].x, lightning.segments[0].y);
+      
+      for (let i = 1; i < lightning.segments.length; i++) {
+        ctx.lineTo(lightning.segments[i].x, lightning.segments[i].y);
+      }
+      
+      ctx.stroke();
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Create new lightning randomly
+      if (Math.random() < 0.02) {
+        lightnings.push(createLightning());
+      }
+
+      // Update and draw lightnings
+      for (let i = lightnings.length - 1; i >= 0; i--) {
+        const lightning = lightnings[i];
+        lightning.life++;
+        
+        if (lightning.life > lightning.maxLife) {
+          lightnings.splice(i, 1);
+          continue;
+        }
+
+        // Fade effect
+        lightning.opacity = 1 - (lightning.life / lightning.maxLife);
+        
+        drawLightning(lightning);
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div className="antialiased selection:bg-black selection:text-white">
-      {/* Canvas removed to improve performance */}
+      <canvas id="lightningCanvas" className="fixed top-0 left-0 w-full h-full pointer-events-none z-0" style={{ background: 'transparent' }} />
 
       <button className="theme-toggle" id="themeToggle" onClick={toggleTheme} aria-label="Toggle theme">
         {theme === 'dark' ? <Sun className="sun-icon" /> : <Moon className="moon-icon" />}
