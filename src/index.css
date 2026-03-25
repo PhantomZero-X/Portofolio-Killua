@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --text-primary: #111111;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+    --accent: #000000;
+    --border-color: #e5e7eb;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --card-bg-solid: rgba(255, 255, 255, 0.6);
+    --skill-item-hover: rgba(0, 0, 0, 0.02);
+    --profile-border: #ffffff;
+    --footer-border: #111111;
+    --section-line: #eeeeee;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #171717;
+    --text-primary: #f5f5f5;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+    --accent: #ffffff;
+    --border-color: #262626;
+    --card-bg: rgba(23, 23, 23, 0.8);
+    --card-bg-solid: rgba(23, 23, 23, 0.6);
+    --skill-item-hover: rgba(255, 255, 255, 0.05);
+    --profile-border: #262626;
+    --footer-border: #262626;
+    --section-line: #1a1a1a;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    margin: 0;
+}
+
+#lightning-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6; 
+}
+
+[data-theme="dark"] #lightning-canvas {
+    opacity: 0.85; 
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fitur Line/Garis Horizontal Antar Section */
+.section-separator {
+    height: 1px;
+    width: 100%;
+    background-color: var(--section-line);
+    margin: 4rem 0;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.5s ease;
+}
+
+/* Skills Styling */
+.skill-card {
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    backdrop-filter: blur(4px);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    cursor: default;
+}
+
+.skill-card:hover {
+    border-color: var(--text-primary);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.skill-card i {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover Color Logic */
+.skill-card:hover .devicon-html5-plain { color: #E34F26; }
+.skill-card:hover .devicon-css3-plain { color: #1572B6; }
+.skill-card:hover .devicon-javascript-plain { color: #F7DF1E; }
+.skill-card:hover .devicon-tailwindcss-original { color: #06B6D4; }
+.skill-card:hover .devicon-php-plain { color: #777BB4; }
+.skill-card:hover .devicon-laravel-original { color: #FF2D20; }
+.skill-card:hover .devicon-flutter-plain { color: #02569B; }
+.skill-card:hover .devicon-mysql-original { color: #4479A1; }
+.skill-card:hover .devicon-python-plain { color: #3776AB; }
+.skill-card:hover .devicon-mongodb-plain { color: #47A248; }
+.skill-card:hover .devicon-typescript-plain { color: #3178C6; }
+.skill-card:hover .devicon-nodejs-plain { color: #339933; }
+.skill-card:hover .devicon-react-original { color: #61DAFB; }
+.skill-card:hover .devicon-vuejs-plain { color: #4FC08D; }
+.skill-card:hover .devicon-linux-plain { color: #FCC624; }
+.skill-card:hover .devicon-git-plain { color: #F05032; }
+.skill-card:hover .devicon-github-original { color: #181717; }
+.skill-card:hover .devicon-docker-plain { color: #2496ED; }
+
+.skill-card:hover svg.lucide {
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+.profile-img-container::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 1px solid var(--text-primary);
+    border-radius: 50%;
+    opacity: 0.1;
+    transition: transform 0.6s ease;
+}
+
+.profile-img-container:hover::after {
+    transform: scale(1.1);
+}
+
+/* Timeline Styling for Study */
+.timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 2rem;
+    border-left: 1px solid var(--border-color);
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -4.5px;
+    top: 0;
+    width: 8px;
+    height: 8px;
+    background-color: var(--text-primary);
+    border-radius: 50%;
+}
+
+.timeline-item:last-child {
+    border-left: 1px solid transparent;
+}
+
+/* Extended Skills Section */
+.skill-category-card {
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg-solid);
+    backdrop-filter: blur(4px);
+    transition: all 0.4s ease;
+}
+
+.skill-category-card:hover {
+    border-color: var(--text-primary);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.skill-item:last-child {
+    border-bottom: none;
+}
+
+.skill-item:hover {
+    padding-left: 0.5rem;
+    background-color: var(--skill-item-hover);
+}
+
+.skill-item i.devicon,
+.skill-item svg.lucide {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    transition: color 0.3s ease, flex-shrink 0;
+}
+
+/* Project & Cert Image Styling */
+.preview-card {
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg-solid);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.preview-card:hover {
+    border-color: var(--text-primary);
+    transform: translateY(-4px);
+}
+
+.preview-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.5s ease;
+}
+
+.preview-card:hover .preview-image {
+    filter: grayscale(0%);
+}
+
+/* Badge styling */
+.badge-available {
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.badge-quote {
+    background-color: var(--border-color);
+}
+
+/* Divider */
+.divider {
+    background-color: var(--text-primary);
+}
+
+/* Custom Footer Style */
+.custom-footer {
+    border-top: 1px solid var(--footer-border);
+}
+
+.antialiased {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.selection\:bg-black::selection {
+    background-color: black;
+}
+
+.selection\:text-white::selection {
+    color: white;
+}
+
